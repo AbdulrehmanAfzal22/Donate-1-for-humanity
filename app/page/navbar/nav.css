@@ -1,0 +1,296 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;900&display=swap');
+
+/* ── Base — Fixed + Frosted Glass ── */
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 40px;
+  height: 72px;
+  font-family: 'DM Sans', sans-serif;
+
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  /* Deep indigo-tinted glass instead of near-black */
+  background: rgba(8, 4, 38, 0.72);
+  border-bottom: 1px solid rgba(0, 229, 255, 0.08);
+}
+
+/* ── Logo ── */
+.navbar__logo {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.navbar__logo-img {
+  height: 100px !important;
+  width: auto !important;
+  object-fit: contain;
+}
+
+.navbar__brand-name {
+  font-size: 22px;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  /* Cyan brand name */
+  color: #00E5FF;
+  font-family: 'DM Sans', sans-serif;
+  user-select: none;
+  white-space: nowrap;
+}
+
+/* ── Links (Desktop — true center) ── */
+.navbar__links {
+  display: flex;
+  align-items: center;
+  gap: 36px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.navbar__item {
+  list-style: none;
+}
+
+.navbar__link {
+  text-decoration: none;
+  font-size: 15px;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.88);
+  letter-spacing: 0.01em;
+  padding-bottom: 4px;
+  border-bottom: 2px solid transparent;
+  transition: color 0.2s ease, border-color 0.2s ease;
+  white-space: nowrap;
+}
+
+.navbar__link:hover {
+  /* Cyan hover instead of yellow */
+  color: #00E5FF;
+}
+
+.navbar__link--active {
+  /* Cyan active state */
+  color: #00E5FF;
+  font-weight: 500;
+  border-bottom: 2px solid #00E5FF;
+  /* Subtle cyan glow on active link */
+  text-shadow: 0 0 12px rgba(0, 229, 255, 0.45);
+}
+
+/* ── Hamburger (hidden on desktop) ── */
+.navbar__hamburger {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  width: 36px;
+  height: 36px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  z-index: 200;
+  flex-shrink: 0;
+}
+
+.navbar__hamburger span {
+  display: block;
+  width: 24px;
+  height: 2px;
+  /* Cyan hamburger lines */
+  background-color: #00E5FF;
+  border-radius: 2px;
+  transition: all 0.3s ease;
+  transform-origin: center;
+}
+
+/* Hamburger → X */
+.navbar__hamburger--open span:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+.navbar__hamburger--open span:nth-child(2) {
+  opacity: 0;
+  transform: scaleX(0);
+}
+.navbar__hamburger--open span:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+/* ── Tablet (≤ 1024px) ── */
+@media (max-width: 1024px) {
+  .navbar__links {
+    gap: 24px;
+  }
+  .navbar__link {
+    font-size: 14px;
+  }
+}
+
+/* ── Mobile (≤ 768px) ── */
+@media (max-width: 768px) {
+  .navbar {
+    padding: 0 20px;
+  }
+
+  .navbar__logo-img {
+    height: 100px !important;
+    width: auto !important;
+  }
+
+  .navbar__links {
+    position: fixed;
+    top: 72px;
+    left: 0;
+    right: 0;
+    /* Deep indigo glass for mobile dropdown */
+    background: rgba(8, 4, 38, 0.95);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+    padding: 16px 0 24px;
+    transform: translateY(-110%);
+    opacity: 0;
+    transition: transform 0.35s ease, opacity 0.3s ease;
+    box-shadow: 0 8px 32px rgba(0, 229, 255, 0.1);
+    border-bottom: 1px solid rgba(0, 229, 255, 0.15);
+    z-index: 99;
+  }
+
+  .navbar__links--open {
+    transform: translateY(0);
+    opacity: 1;
+  }
+
+  .navbar__item {
+    width: 100%;
+    text-align: center;
+  }
+
+  .navbar__link {
+    display: block;
+    padding: 14px 0;
+    font-size: 16px;
+    border-bottom: none;
+    color: rgba(255, 255, 255, 0.75);
+  }
+
+  .navbar__link--active {
+    color: #00E5FF;
+    font-weight: 600;
+    border-bottom: none;
+    background-color: rgba(0, 229, 255, 0.07);
+    text-shadow: 0 0 12px rgba(0, 229, 255, 0.35);
+  }
+
+  .navbar__link:hover {
+    background-color: rgba(124, 58, 255, 0.08);
+    color: #00E5FF;
+  }
+
+  .navbar__hamburger {
+    display: flex;
+  }
+}
+
+/* ── Small mobile (≤ 400px) ── */
+@media (max-width: 400px) {
+  .navbar {
+    padding: 0 16px;
+  }
+
+  .navbar__logo-img {
+    height: 100px !important;
+    width: auto !important;
+  }
+
+  .navbar__brand-name {
+    font-size: 18px;
+  }
+}
+
+/* ════════════════════════════════════════
+   JOIN US BUTTON
+════════════════════════════════════════ */
+
+/* Right-side wrapper (Join Us + hamburger) */
+.navbar__right {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-shrink: 0;
+}
+
+/* Button base */
+.navbar__join-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 9px 22px;
+  border-radius: 50px;
+  border: none;
+  background: linear-gradient(90deg, #7C3AFF, #00E5FF);
+  color: #fff;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  box-shadow: 0 4px 16px rgba(0, 229, 255, 0.25);
+  transition: transform 0.22s ease, box-shadow 0.22s ease, background 0.22s ease;
+  white-space: nowrap;
+}
+
+.navbar__join-btn:hover {
+  background: linear-gradient(90deg, #5B1FE0, #00BFDF);
+  transform: translateY(-1px);
+  box-shadow: 0 8px 22px rgba(0, 229, 255, 0.40);
+}
+
+.navbar__join-btn:active {
+  transform: translateY(0);
+}
+
+/* Desktop: always visible */
+.navbar__join-btn--desktop {
+  display: inline-flex;
+}
+
+/* Mobile version inside dropdown — hidden by default */
+.navbar__item--join-mobile {
+  display: none;
+}
+
+/* ── Mobile (≤ 768px) ── */
+@media (max-width: 768px) {
+  /* Hide desktop Join Us */
+  .navbar__join-btn--desktop {
+    display: none;
+  }
+
+  /* Show inside dropdown */
+  .navbar__item--join-mobile {
+    display: flex;
+    justify-content: center;
+    padding: 10px 0 4px;
+  }
+
+  .navbar__item--join-mobile .navbar__join-btn {
+    font-size: 15px;
+    padding: 11px 32px;
+  }
+}
