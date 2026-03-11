@@ -1,6 +1,8 @@
 "use client";
 import { useState, useEffect } from "react";
+import Image from "next/image";
 import "./donateform.css";
+import d1h from "../../../public/assets/d1h.png";
 import {
   X, Heart, User, Mail, Phone,
   Lock, CheckCircle, Loader2, Send
@@ -146,9 +148,9 @@ export default function DonateForm({ amount, onClose }) {
           <>
             <div className="dform__header">
 
-              <div className="dform__heart-wrap">
-                <Heart size={20} fill="#f07b2f" stroke="none" className="dform__heart" />
-              </div>
+              {/* <div className="dform__heart-wrap"> */}
+                            <Image src={d1h} alt="Join Icon" className="d1h-logo2" />
+              {/* </div> */}
 
               <div className="dform__header-text">
                 <h3 className="dform__title">Complete Donation</h3>
@@ -222,10 +224,10 @@ export default function DonateForm({ amount, onClose }) {
 
             </form>
 
-            <div className="dform__secure">
+            {/* <div className="dform__secure">
               <Lock size={10} strokeWidth={2.5} />
               Encrypted & secure
-            </div>
+            </div> */}
           </>
         )}
       </div>

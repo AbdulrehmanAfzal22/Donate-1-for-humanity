@@ -1,11 +1,15 @@
 "use client";
 import { useState } from "react";
+import Image from "next/image";
+import { HandCoins, HeartHandshake, Home } from "lucide-react";
 import "./join.css";
+import d1h from "../../../public/assets/d1h.png";
 
 const ROLES = [
   {
     id: "donor",
-    icon: "💎",
+    icon: "lucide",
+    LucideIcon: HandCoins,
     title: "Donor",
     subtitle: "Support with funds",
     desc: "Make a financial contribution to help us reach more people in need.",
@@ -15,7 +19,8 @@ const ROLES = [
   },
   {
     id: "volunteer",
-    icon: "🤝",
+    icon: "lucide",
+    LucideIcon: HeartHandshake,
     title: "Volunteer",
     subtitle: "Give your time",
     desc: "Join our on-ground team and contribute your skills and energy directly.",
@@ -25,7 +30,8 @@ const ROLES = [
   },
   {
     id: "place",
-    icon: "🏛️",
+    icon: "lucide",
+    LucideIcon: Home,
     title: "Offer a Venue",
     subtitle: "Volunteer by space",
     desc: "Provide a venue, hall or space for our programs, events or activities.",
@@ -34,6 +40,11 @@ const ROLES = [
     placeholders: ["Muhammad Ali", "you@email.com", "+92 300 0000000", "Street, City"],
   },
 ];
+
+function RoleIcon({ role, size = 26 }) {
+  const Icon = role.LucideIcon;
+  return <Icon size={size} strokeWidth={1.8} className="jm__lucide-icon" />;
+}
 
 export default function JoinModal({ onClose }) {
   const [step, setStep] = useState("choose");
@@ -52,14 +63,38 @@ export default function JoinModal({ onClose }) {
   };
 
   const validate = () => {
+    if (!role) return {};
     const newErrors = {};
     role.fields.forEach((label, i) => {
       const key = `field_${i}`;
-      if (!values[key] || !values[key].trim()) {
+      const value = values[key]?.trim();
+
+      // Required field check
+      if (!value) {
         newErrors[key] = `${label} is required`;
+        return;
       }
-      if (role.fieldTypes[i] === "email" && values[key] && !/\S+@\S+\.\S+/.test(values[key])) {
-        newErrors[key] = "Enter a valid email";
+
+      // Email validation
+      if (role.fieldTypes[i] === "email") {
+        if (!/\S+@\S+\.\S+/.test(value)) {
+          newErrors[key] = "Enter a valid email address";
+        }
+      }
+
+      // Phone number validation
+      if (role.fieldTypes[i] === "tel") {
+        if (!/^(\+92|0)[3-9]\d{9}$/.test(value.replace(/\s+/g, ''))) {
+          newErrors[key] = "Enter a valid Pakistani phone number (+92 or 03XX format)";
+        }
+      }
+
+      // Donation amount validation (for donor role)
+      if (label.toLowerCase().includes("donation") && role.id === "donor") {
+        const amount = parseFloat(value.replace(/[^\d.]/g, ''));
+        if (isNaN(amount) || amount < 100) {
+          newErrors[key] = "Minimum donation amount is PKR 100";
+        }
       }
     });
     return newErrors;
@@ -67,22 +102,16 @@ export default function JoinModal({ onClose }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!role) return;
     const errs = validate();
-    if (Object.keys(errs).length) { 
-      setErrors(errs); 
-      return; 
-    }
+    if (Object.keys(errs).length) { setErrors(errs); return; }
 
     setLoading(true);
-
     try {
       const formData = new FormData();
-
       role.fields.forEach((label, i) => {
-        const key = `field_${i}`;
-        formData.append(label, values[key]);
+        formData.append(label, values[`field_${i}`]);
       });
-
       formData.append("Role", role.title);
       formData.append("_subject", `New ${role.title} Application`);
       formData.append("_captcha", "false");
@@ -90,15 +119,12 @@ export default function JoinModal({ onClose }) {
 
       await fetch("https://formsubmit.co/abdulrehmanafzal60@gmail.com", {
         method: "POST",
-        headers: {
-          Accept: "application/json"
-        },
-        body: formData
+        headers: { Accept: "application/json" },
+        body: formData,
       });
 
       setLoading(false);
       setStep("success");
-
     } catch (error) {
       console.error(error);
       setLoading(false);
@@ -113,17 +139,14 @@ export default function JoinModal({ onClose }) {
   return (
     <div className="jm__backdrop" onClick={handleBackdrop}>
       <div className="jm__modal">
-
         <div className="jm__top-bar" />
-
         <button className="jm__close" onClick={onClose} aria-label="Close">✕</button>
 
+        {/* ── STEP 1: Choose role ── */}
         {step === "choose" && (
           <div className="jm__choose">
             <div className="jm__header">
-              <div className="jm__icon-wrap">
-                <span className="jm__icon-star">✦</span>
-              </div>
+              <Image src={d1h} alt="Join Icon" className="d1h-logo1" />
               <h2 className="jm__title">Join Our Mission</h2>
               <p className="jm__subtitle">Choose how you'd like to make a difference</p>
             </div>
@@ -131,7 +154,9 @@ export default function JoinModal({ onClose }) {
             <div className="jm__cards">
               {ROLES.map((r) => (
                 <button key={r.id} className="jm__role-card" onClick={() => handleSelect(r.id)}>
-                  <span className="jm__role-emoji">{r.icon}</span>
+                  <span className="jm__role-icon-wrap">
+                    <RoleIcon role={r} size={24} />
+                  </span>
                   <span className="jm__role-title">{r.title}</span>
                   <span className="jm__role-sub">{r.subtitle}</span>
                   <span className="jm__role-arrow">→</span>
@@ -143,11 +168,14 @@ export default function JoinModal({ onClose }) {
           </div>
         )}
 
+        {/* ── STEP 2: Form ── */}
         {step === "form" && role && (
           <div className="jm__form-wrap">
             <div className="jm__form-header">
               <button className="jm__back" onClick={() => setStep("choose")}>← Back</button>
-              <span className="jm__form-emoji">{role.icon}</span>
+              <span className="jm__form-emoji-wrap">
+                <RoleIcon role={role} size={28} />
+              </span>
               <h2 className="jm__title">{role.title}</h2>
               <p className="jm__subtitle">{role.desc}</p>
             </div>
@@ -186,6 +214,7 @@ export default function JoinModal({ onClose }) {
           </div>
         )}
 
+        {/* ── STEP 3: Success ── */}
         {step === "success" && role && (
           <div className="jm__success">
             <div className="jm__success-ring">

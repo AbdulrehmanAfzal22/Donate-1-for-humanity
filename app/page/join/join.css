@@ -1,4 +1,12 @@
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,700;0,900;1,400&family=Poppins:wght@400;500;600;700;800&display=swap');
+
+
+.d1h-logo1 {
+    width: 150px;
+    margin-left: -16px;
+    height: 140px;
+}
+
+/* @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,700;0,900;1,400&family=Poppins:wght@400;500;600;700;800&display=swap'); */
 
 /* ════════════════════════════════════════
    BACKDROP
@@ -61,8 +69,8 @@
   height: 30px;
   border-radius: 50%;
   border: none;
-  background: #f3f4f6;
-  color: #9ca3af;
+  background: #a1a1a1;
+  color: #000000;
   font-size: 13px;
   cursor: pointer;
   display: flex;
@@ -503,4 +511,39 @@
   .jm__role-card { padding: 12px 14px; }
   .jm__role-emoji { font-size: 22px; }
   .jm__role-title { font-size: 14px; }
+}
+
+/* ── Lucide icon inside role cards ── */
+.jm__role-icon-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+}
+
+/* Lucide stroke icons — indigo → cyan gradient via SVG trick */
+.jm__lucide-icon {
+  color: #7C3AFF;
+  transition: color 0.22s ease;
+}
+
+.jm__role-card:hover .jm__lucide-icon {
+  color: #00BFDF;
+}
+
+/* Form step icon wrap */
+.jm__form-emoji-wrap {
+  display: flex;
+  align-items: center;
+  font-size: 28px;
+  margin-bottom: 4px;
+}
+
+/* Keep emoji sizing consistent */
+.jm__role-emoji {
+  font-size: 24px;
+  line-height: 1;
+  flex-shrink: 0;
 }

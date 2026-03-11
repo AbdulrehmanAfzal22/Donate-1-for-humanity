@@ -1,180 +1,220 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;900&family=Poppins:wght@400;500;600;700;800&display=swap');
+
+/* ════════════════════════════════════════
+   FOOTER ROOT
+════════════════════════════════════════ */
 .footer {
-  /* Deep space indigo instead of white */
   background: #02030F;
   color: #ffffff;
-  padding: 60px 80px 40px;
+  padding: 56px 80px 36px;
   font-family: 'DM Sans', sans-serif;
-  border-top: 1px solid rgba(0, 229, 255, 0.1);
+  border-top: 1px solid rgba(0, 229, 255, 0.08);
 }
 
 .footer__container {
-  max-width: 1200px;
+  max-width: 1400px;
   margin: 0 auto;
 }
 
-/* ── Main section: two columns ── */
+/* ════════════════════════════════════════
+   MAIN — Contact LEFT, Legal RIGHT (far ends)
+════════════════════════════════════════ */
 .footer__main {
   display: flex;
   flex-direction: row;
   align-items: flex-start;
-  justify-content: space-between;
-  gap: 40px;
+  justify-content: space-between;  /* pushes columns to far ends */
   margin-bottom: 48px;
 }
 
-.footer__headline {
-  font-size: clamp(26px, 3.2vw, 30px);
+.footer__col {
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── Column heading ── */
+.footer__col-heading {
+  font-family: 'Poppins', sans-serif;
+  font-size: 15px;
   font-weight: 700;
-  line-height: 1.2;
+  color: #ffffff;
+  letter-spacing: 0.03em;
+  margin: 0 0 20px 0;
+}
+
+/* ════════════════════════════════════════
+   CONTACT COLUMN
+════════════════════════════════════════ */
+.footer__contact-list {
+  list-style: none;
   margin: 0;
-  font-family: 'Poppins', sans-serif;
-  /* Light white instead of near-black */
-  color: rgba(255, 255, 255, 0.92);
-  max-width: 480px;
-  text-align: left;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
 }
 
-.footer__contact {
-  text-align: left;
+.footer__contact-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.55);
+  line-height: 1.55;
+}
+
+.footer__contact-icon {
+  color: rgba(255, 255, 255, 0.55);
   flex-shrink: 0;
+  margin-top: 2px;
 }
 
-.footer__label {
-  font-size: 13px;
-  /* Dimmed white instead of grey */
-  color: rgba(255, 255, 255, 0.4);
-  margin: 0 0 8px 0;
-  font-weight: 400;
-  font-family: 'Poppins', sans-serif;
-  letter-spacing: 0.2px;
-}
-
-.footer__email {
-  font-size: clamp(20px, 2.8vw, 28px);
-  font-weight: 700;
-  /* Cyan email link instead of orange */
-  color: #00E5FF;
+.footer__contact-link {
+  color: rgba(255, 255, 255, 0.55);
   text-decoration: none;
-  font-family: 'Poppins', sans-serif;
-  border-bottom: 2px solid #00E5FF;
-  padding-bottom: 3px;
-  transition: all 0.25s ease;
+  transition: color 0.2s ease;
+}
+
+.footer__contact-link:hover {
+  color: #ffffff;
+}
+
+/* ════════════════════════════════════════
+   LEGAL COLUMN — aligned to the right
+════════════════════════════════════════ */
+.footer__col--legal {
+  text-align: left;
+}
+
+.footer__legal-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.footer__legal-link {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.55);
+  text-decoration: none;
+  transition: color 0.2s ease;
   display: inline-block;
-  text-shadow: 0 0 16px rgba(0, 229, 255, 0.35);
 }
 
-.footer__email:hover {
-  color: #00BFDF;
-  border-color: #00BFDF;
-  text-shadow: 0 0 22px rgba(0, 229, 255, 0.55);
+.footer__legal-link:hover {
+  color: rgba(255, 255, 255, 0.90);
 }
 
-/* ── Separator ── */
+/* ════════════════════════════════════════
+   DIVIDER
+════════════════════════════════════════ */
 .footer__line {
   height: 1px;
-  /* Indigo-tinted separator */
-  background: rgba(0, 229, 255, 0.1);
+  background: rgba(255, 255, 255, 0.10);
   margin: 0 0 28px 0;
   width: 100%;
 }
 
-/* ── Bottom bar ── */
+/* ════════════════════════════════════════
+   BOTTOM BAR — copyright left, social right
+════════════════════════════════════════ */
 .footer__bottom {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-size: 13px;
-  color: rgba(255, 255, 255, 0.5);
-}
-
-.footer__logo {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  font-weight: 800;
-  font-size: 18px;
-  /* White logo text */
-  color: rgba(255, 255, 255, 0.92);
-  letter-spacing: 0.3px;
-}
-
-/* Diamond icon: indigo → cyan gradient */
-.footer__logo-icon {
-  width: 20px;
-  height: 20px;
-  background: linear-gradient(135deg, #7C3AFF, #00E5FF);
-  clip-path: polygon(50% 0%, 0% 50%, 50% 100%, 100% 50%);
-  display: inline-block;
-  flex-shrink: 0;
+  gap: 20px;
 }
 
 .footer__copyright {
   margin: 0;
-  color: rgba(255, 255, 255, 0.35);
   font-size: 13px;
+  color: rgba(255, 255, 255, 0.30);
   font-weight: 400;
+  font-family: 'DM Sans', sans-serif;
 }
 
+/* ════════════════════════════════════════
+   SOCIAL — colored bubbles like reference image
+════════════════════════════════════════ */
 .footer__social {
   display: flex;
-  gap: 22px;
+  gap: 10px;
   align-items: center;
 }
 
 .footer__social-link {
-  color: rgba(255, 255, 255, 0.5);
-  font-size: 15px;
-  font-weight: 600;
-  text-decoration: none;
-  transition: color 0.25s ease, text-shadow 0.25s ease;
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
+  text-decoration: none;
+  transition: transform 0.22s ease, box-shadow 0.22s ease, opacity 0.22s ease;
+  opacity: 0.88;
 }
 
 .footer__social-link:hover {
-  /* Cyan hover on social links */
-  color: #00E5FF;
-  text-shadow: 0 0 10px rgba(0, 229, 255, 0.4);
+  transform: translateY(-2px);
+  opacity: 1;
 }
 
-/* ── Responsive ── */
+/* Facebook — blue */
+.footer__social-link--fb {
+  background: #1877F2;
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(24, 119, 242, 0.30);
+}
+.footer__social-link--fb:hover {
+  box-shadow: 0 6px 20px rgba(24, 119, 242, 0.55);
+}
+
+/* Instagram — gradient */
+.footer__social-link--ig {
+  background: radial-gradient(circle at 30% 110%, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(220, 39, 67, 0.30);
+}
+.footer__social-link--ig:hover {
+  box-shadow: 0 6px 20px rgba(220, 39, 67, 0.55);
+}
+
+/* LinkedIn — blue */
+.footer__social-link--li {
+  background: #0A66C2;
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(10, 102, 194, 0.30);
+}
+.footer__social-link--li:hover {
+  box-shadow: 0 6px 20px rgba(10, 102, 194, 0.55);
+}
+
+/* ════════════════════════════════════════
+   RESPONSIVE — 768px
+════════════════════════════════════════ */
 @media (max-width: 768px) {
   .footer {
-    padding: 48px 24px 32px;
+    padding: 44px 24px 28px;
   }
 
   .footer__main {
     flex-direction: column;
-    gap: 28px;
+    gap: 36px;
     margin-bottom: 36px;
-  }
-
-  .footer__headline {
-    font-size: 28px;
-  }
-
-  .footer__email {
-    font-size: 22px;
   }
 
   .footer__bottom {
     flex-direction: column;
+    align-items: flex-start;
     gap: 16px;
-    text-align: center;
   }
 }
 
 @media (max-width: 480px) {
-  .footer__headline {
-    font-size: 24px;
-  }
-
-  .footer__email {
-    font-size: 20px;
-  }
-
-  .footer__logo {
-    font-size: 16px;
-  }
+  .footer { padding: 36px 20px 24px; }
+  .footer__col-heading { font-size: 14px; }
+  .footer__contact-item,
+  .footer__legal-link { font-size: 13px; }
 }

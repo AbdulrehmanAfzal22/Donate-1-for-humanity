@@ -1,5 +1,7 @@
 "use client";
 import "./footer.css";
+import Image from "next/image";
+import { MapPin, Phone, Mail } from "lucide-react";
 
 export default function Footer() {
   const year = new Date().getFullYear();
@@ -8,54 +10,73 @@ export default function Footer() {
     <footer className="footer">
       <div className="footer__container">
 
-        {/* Two-column main section */}
+        {/* ── TOP: Contact + Legal columns ── */}
         <div className="footer__main">
-          <h2 className="footer__headline">
-            Let's talk about how we can<br />
-            transform lives together!
-          </h2>
 
-          <div className="footer__contact">
-            <p className="footer__label">Get in touch with our team</p>
-            <a href="mailto:info@SAYA.com" className="footer__email">
-              d1h.organization@gmail.com
-            </a>
+          {/* Contact Us */}
+          <div className="footer__col">
+            <h3 className="footer__col-heading">Contact Us</h3>
+            <ul className="footer__contact-list">
+              <li className="footer__contact-item">
+                <MapPin size={15} strokeWidth={2} className="footer__contact-icon" />
+                <span>
+                  Johr town, Lahore<br />
+                  Pakistan
+                </span>
+              </li>
+              <li className="footer__contact-item">
+                <Phone size={15} strokeWidth={2} className="footer__contact-icon" />
+                <a href="tel:+923001234567" className="footer__contact-link">+92 327 0195296</a>
+              </li>
+              <li className="footer__contact-item">
+                <Mail size={15} strokeWidth={2} className="footer__contact-icon" />
+                <a href="mailto:d1h.organization@gmail.com" className="footer__contact-link footer__contact-link--email">
+                  d1h.organization@gmail.com
+                </a>
+              </li>
+            </ul>
           </div>
+
+          {/* Legal */}
+          <div className="footer__col">
+            <h3 className="footer__col-heading">Legal</h3>
+            <ul className="footer__legal-list">
+              <li><a href="/privacy-policy" className="footer__legal-link">Privacy Policy</a></li>
+              <li><a href="/refund-policy"  className="footer__legal-link">Refund Policy</a></li>
+              <li><a href="/terms"          className="footer__legal-link">Terms and Conditions</a></li>
+            </ul>
+          </div>
+
         </div>
 
+        {/* ── Divider ── */}
         <div className="footer__line" />
 
-        {/* Bottom bar: logo | copyright | social */}
+        {/* ── BOTTOM: copyright + social ── */}
         <div className="footer__bottom">
-          <div className="footer__logo">
-            <span className="footer__logo-icon" aria-hidden="true" />
-            D1H - Donate 1% For Humanity
-          </div>
-
-        
-        
+          <p className="footer__copyright">
+            Copyright © {year} D1H — Donate 1% For Humanity. All rights reserved.
+          </p>
 
           <div className="footer__social">
-            <a href="#" className="footer__social-link" aria-label="Facebook">
+            {/* Facebook */}
+            <a href="https://www.facebook.com/d1h.trust/" className="footer__social-link footer__social-link--fb" aria-label="Facebook">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
               </svg>
             </a>
-            {/* <a href="#" className="footer__social-link" aria-label="X (Twitter)">
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
-              </svg>
-            </a> */}
-            <a href="https://www.instagram.com/d1h.trust/" className="footer__social-link" aria-label="Instagram">
+            {/* Instagram */}
+            <a href="https://www.instagram.com/d1h.trust/" className="footer__social-link footer__social-link--ig" aria-label="Instagram">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
                 <circle cx="12" cy="12" r="4"/>
                 <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/>
               </svg>
             </a>
-            {/* <a href="#" className="footer__social-link" aria-label="LinkedIn">
+            {/* LinkedIn */}
+            {/* <a href="#" className="footer__social-link footer__social-link--li" aria-label="LinkedIn">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/>
+                <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z"/>
                 <rect x="2" y="9" width="4" height="12"/>
                 <circle cx="4" cy="4" r="2"/>
               </svg>
