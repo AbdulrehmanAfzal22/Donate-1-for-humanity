@@ -1,7 +1,6 @@
 "use client";
 import "./footer.css";
-import Image from "next/image";
-import { MapPin, Phone, Mail } from "lucide-react";
+import { MapPin, Phone } from "lucide-react";
 
 export default function Footer() {
   const year = new Date().getFullYear();
@@ -29,7 +28,12 @@ export default function Footer() {
                 <a href="tel:+923001234567" className="footer__contact-link">+92 327 0195296</a>
               </li>
               <li className="footer__contact-item">
-                <Mail size={15} strokeWidth={2} className="footer__contact-icon" />
+                <svg className="footer__contact-icon footer__contact-icon--gmail" width="15" height="15" viewBox="0 0 24 24" aria-hidden="true">
+                  <path
+                    fill="currentColor"
+                    d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2Zm0 4.236-8 4.8-8-4.8V6l8 4.8L20 6v2.236Z"
+                  />
+                </svg>
                 <a href="mailto:d1h.organization@gmail.com" className="footer__contact-link footer__contact-link--email">
                   d1h.organization@gmail.com
                 </a>

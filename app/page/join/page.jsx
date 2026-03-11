@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import Image from "next/image";
+import useBlurValidation from "../../hooks/useBlurValidation";
 import { HandCoins, HeartHandshake, Home } from "lucide-react";
 import "./join.css";
 import d1h from "../../../public/assets/d1h.png";
@@ -50,61 +51,66 @@ export default function JoinModal({ onClose }) {
   const [step, setStep] = useState("choose");
   const [selected, setSelected] = useState(null);
   const [values, setValues] = useState({});
-  const [errors, setErrors] = useState({});
-  const [loading, setLoading] = useState(false);
 
   const role = ROLES.find((r) => r.id === selected);
+
+  const validators = role
+    ? role.fields.reduce((acc, label, i) => {
+        const key = `field_${i}`;
+        const type = role.fieldTypes[i];
+
+        acc[key] = (v) => {
+          const value = (v ?? "").trim();
+
+          if (!value) return `${label} is required`;
+
+          if (type === "email") {
+            if (!/\S+@\S+\.\S+/.test(value)) return "Enter a valid email address";
+          }
+
+          if (type === "tel") {
+            const normalized = value.replace(/\s+/g, "");
+            if (!/^(\+92|0)[3-9]\d{9}$/.test(normalized)) {
+              return "Enter a valid Pakistani phone number (+92 or 03XX format)";
+            }
+          }
+
+          if (label.toLowerCase().includes("donation") && role.id === "donor") {
+            const amount = parseFloat(value.replace(/[^\d.]/g, ""));
+            if (isNaN(amount) || amount < 100) return "Minimum donation amount is PKR 100";
+          }
+
+          return "";
+        };
+
+        return acc;
+      }, {})
+    : {};
+
+  const {
+    visibleErrors,
+    setValue,
+    handleBlur,
+    validateAll,
+  } = useBlurValidation({
+    initialValues: values,
+    validators,
+  });
+  const [loading, setLoading] = useState(false);
 
   const handleSelect = (id) => {
     setSelected(id);
     setStep("form");
     setValues({});
-    setErrors({});
   };
 
-  const validate = () => {
-    if (!role) return {};
-    const newErrors = {};
-    role.fields.forEach((label, i) => {
-      const key = `field_${i}`;
-      const value = values[key]?.trim();
 
-      // Required field check
-      if (!value) {
-        newErrors[key] = `${label} is required`;
-        return;
-      }
-
-      // Email validation
-      if (role.fieldTypes[i] === "email") {
-        if (!/\S+@\S+\.\S+/.test(value)) {
-          newErrors[key] = "Enter a valid email address";
-        }
-      }
-
-      // Phone number validation
-      if (role.fieldTypes[i] === "tel") {
-        if (!/^(\+92|0)[3-9]\d{9}$/.test(value.replace(/\s+/g, ''))) {
-          newErrors[key] = "Enter a valid Pakistani phone number (+92 or 03XX format)";
-        }
-      }
-
-      // Donation amount validation (for donor role)
-      if (label.toLowerCase().includes("donation") && role.id === "donor") {
-        const amount = parseFloat(value.replace(/[^\d.]/g, ''));
-        if (isNaN(amount) || amount < 100) {
-          newErrors[key] = "Minimum donation amount is PKR 100";
-        }
-      }
-    });
-    return newErrors;
-  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!role) return;
-    const errs = validate();
-    if (Object.keys(errs).length) { setErrors(errs); return; }
+    const errs = validateAll();
+    if (Object.keys(errs).length) return;
 
     setLoading(true);
     try {
@@ -186,19 +192,21 @@ export default function JoinModal({ onClose }) {
                 return (
                   <div key={key} className="jm__field">
                     <label className="jm__label">{label}</label>
-                    <div className={`jm__input-wrap ${errors[key] ? "jm__input-wrap--error" : ""}`}>
+                    <div className={`jm__input-wrap ${visibleErrors[key] ? "jm__input-wrap--error" : ""}`}>
                       <input
                         className="jm__input"
                         type={role.fieldTypes[i]}
                         placeholder={role.placeholders[i]}
                         value={values[key] || ""}
                         onChange={(e) => {
-                          setValues((v) => ({ ...v, [key]: e.target.value }));
-                          if (errors[key]) setErrors((er) => { const n = { ...er }; delete n[key]; return n; });
+                          const next = e.target.value;
+                          setValues((v) => ({ ...v, [key]: next }));
+                          setValue(key, next);
                         }}
+                        onBlur={handleBlur}
                       />
                     </div>
-                    {errors[key] && <span className="jm__error">{errors[key]}</span>}
+                    {visibleErrors[key] && <span className="jm__error">{visibleErrors[key]}</span>}
                   </div>
                 );
               })}

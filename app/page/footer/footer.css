@@ -69,6 +69,11 @@
   margin-top: 2px;
 }
 
+/* Gmail icon tweak (inline SVG) */
+.footer__contact-icon--gmail {
+  margin-top: 3px;
+}
+
 .footer__contact-link {
   color: rgba(255, 255, 255, 0.55);
   text-decoration: none;

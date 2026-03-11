@@ -10,7 +10,7 @@ const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [showJoin, setShowJoin] = useState(false);
 
-  const links = ["Home", "About us", "Facilities", "Donate", "Programs"];
+  const links = ["Home", "About us", "Facilities", "Donate", "Programs", "Events"];
 
   return (
     <>
@@ -26,12 +26,13 @@ const Navbar = () => {
             <li key={link} className="navbar__item">
               <a
                 href={
-                  link === "Home"       ? "#hero"       :
+                  // link === "Home"       ? "#hero"       :
                   link === "About us"   ? "#about"      :
                   link === "Programs"   ? "#packages"   :
                   link === "Facilities" ? "#facilities" :
                   link === "Zakat"      ? "#zakat"      :
                   link === "Donate"     ? "#donate"     :
+                   link === "Events"     ? "#events"     :
                   link === "Contacts"   ? "#contact"    : "#"
                 }
                 className={`navbar__link ${active === link ? "navbar__link--active" : ""}`}
@@ -40,7 +41,7 @@ const Navbar = () => {
                   const idMap = {
                     "Home": "hero", "About us": "about", "Programs": "packages",
                     "Facilities": "facilities", "Zakat": "zakat",
-                    "Donate": "donate", "Contacts": "contact",
+                    "Donate": "donate", "Events": "events", "Contacts": "contact",
                   };
                   const section = document.getElementById(idMap[link]);
                   if (section) section.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -52,7 +53,24 @@ const Navbar = () => {
               </a>
             </li>
           ))}
+                 {/* Blinking Event Dot */}
+          <button
+            className="navbar__event-dot"
+            aria-label="Go to Events"
+            onClick={(e) => {
+              e.preventDefault();
+              const section = document.getElementById("events");
+              if (!section) return;
 
+              // Account for fixed navbar height
+              const navOffset = 84; // ~72px navbar + a bit of spacing
+              const y = section.getBoundingClientRect().top + window.scrollY - navOffset;
+              window.scrollTo({ top: y, behavior: "smooth" });
+
+              setActive("Events");
+              setMenuOpen(false);
+            }}
+          />
           {/* Join Us — mobile only (inside dropdown) */}
           <li className="navbar__item navbar__item--join-mobile">
             <button
@@ -64,7 +82,7 @@ const Navbar = () => {
           </li>
         </ul>
 
-        {/* Right: Join Us (desktop) + Hamburger */}
+        {/* Right: Join Us (desktop) + Event dot + Hamburger */}
         <div className="navbar__right">
           <button
             className="navbar__join-btn navbar__join-btn--desktop"
@@ -72,6 +90,8 @@ const Navbar = () => {
           >
             Join Us
           </button>
+
+   
 
           <button
             className={`navbar__hamburger ${menuOpen ? "navbar__hamburger--open" : ""}`}

@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import Image from "next/image";
+import useBlurValidation from "../../hooks/useBlurValidation";
 import "./donateform.css";
 import d1h from "../../../public/assets/d1h.png";
 import {
@@ -10,8 +11,31 @@ import {
 
 export default function DonateForm({ amount, onClose }) {
 
-  const [form, setForm]           = useState({ name: "", email: "", phone: "" });
-  const [errors, setErrors]       = useState({});
+
+  const validators = {
+    name: (v) => (!v?.trim() ? "Full name is required." : ""),
+    email: (v) => {
+      if (!v?.trim()) return "Email is required.";
+      if (!/\S+@\S+\.\S+/.test(v)) return "Enter a valid email.";
+      return "";
+    },
+    phone: (v) => {
+      if (!v?.trim()) return "Phone number is required.";
+      if (!/^\+?[\d\s\-()]{7,}$/.test(v)) return "Enter a valid phone.";
+      return "";
+    },
+  };
+
+  const {
+    values: form,
+    visibleErrors,
+    handleChange,
+    handleBlur,
+    validateAll,
+  } = useBlurValidation({
+    initialValues: { name: "", email: "", phone: "" },
+    validators,
+  });
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading]     = useState(false);
 
@@ -26,42 +50,12 @@ export default function DonateForm({ amount, onClose }) {
     return () => window.removeEventListener("keydown", handler);
   }, [onClose]);
 
-  function validate() {
-    const errs = {};
-
-    if (!form.name.trim()) errs.name = "Full name is required.";
-
-    if (!form.email.trim()) errs.email = "Email is required.";
-    else if (!/\S+@\S+\.\S+/.test(form.email))
-      errs.email = "Enter a valid email.";
-
-    if (!form.phone.trim()) errs.phone = "Phone number is required.";
-    else if (!/^\+?[\d\s\-()]{7,}$/.test(form.phone))
-      errs.phone = "Enter a valid phone.";
-
-    return errs;
-  }
-
-  function handleChange(e) {
-    setForm(prev => ({
-      ...prev,
-      [e.target.name]: e.target.value
-    }));
-
-    setErrors(prev => ({
-      ...prev,
-      [e.target.name]: ""
-    }));
-  }
 
   async function handleSubmit(e) {
     e.preventDefault();
 
-    const errs = validate();
-    if (Object.keys(errs).length) {
-      setErrors(errs);
-      return;
-    }
+    const errs = validateAll();
+    if (Object.keys(errs).length) return;
 
     setLoading(true);
 
@@ -179,7 +173,7 @@ export default function DonateForm({ amount, onClose }) {
                     {label}
                   </label>
 
-                  <div className={`dform__input-wrap ${errors[name] ? "dform__input-wrap--error" : ""}`}>
+                  <div className={`dform__input-wrap ${visibleErrors[name] ? "dform__input-wrap--error" : ""}`}>
                     <span className="dform__input-icon">
                       <Icon size={14} strokeWidth={2} />
                     </span>
@@ -192,13 +186,14 @@ export default function DonateForm({ amount, onClose }) {
                       placeholder={placeholder}
                       value={form[name]}
                       onChange={handleChange}
+                      onBlur={handleBlur}
                       autoComplete={autoComplete}
                     />
 
                   </div>
 
-                  {errors[name] && (
-                    <span className="dform__error">{errors[name]}</span>
+                  {visibleErrors[name] && (
+                    <span className="dform__error">{visibleErrors[name]}</span>
                   )}
 
                 </div>

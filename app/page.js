@@ -9,7 +9,7 @@ import Donate from './page/donatesection/page';
 import DonateSection from './page/banks/page';
 import Footer from './page/footer/page';
 import Report from './page/package/page';
-
+import EventsPage from './page/event/page';
 export default function Page() {
   const [showBankModal, setShowBankModal] = useState(false);
 
@@ -42,9 +42,11 @@ export default function Page() {
       <Hero onDonateClick={openModal} />
       <About />
       <Facilities />
-      {/* <Zakat /> */}
-      <Donate />
+      <Zakat />
       <Report />
+      <EventsPage />
+      <Donate />
+      
       <Footer />
 
       {showBankModal && (
