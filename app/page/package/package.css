@@ -169,15 +169,17 @@
   right: 155px;
 }
 
-.reportImage1 p, .reportImage2 p, .reportImage3 p {
-    color: #fff;
-    z-index: 2;
-    font-family: Poppins, sans-serif;
-    font-size: 15px;
-    position: absolute;
-    top: 158px;
-    left: 30px;
-    right: 100px;
+.reportImage1 p,
+.reportImage2 p,
+.reportImage3 p {
+  color: #fff;
+  z-index: 2;
+  font-family: Poppins, sans-serif;
+  font-size: 15px;
+  position: absolute;
+  top: 158px;
+  left: 30px;
+  right: 100px;
 }
 
 .reportImage1 svg,

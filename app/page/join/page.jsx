@@ -172,12 +172,33 @@ export default function JoinModal({ onClose }) {
                     <div className={`jm__input-wrap ${errors[key] ? "jm__input-wrap--error" : ""}`}>
                       <input
                         className="jm__input"
-                        type={role.fieldTypes[i]}
-                        placeholder={role.placeholders[i]}
+                        type={role.fieldTypes?.[i] || "text"}
+                        placeholder={role.placeholders?.[i] || ""}
                         value={values[key] || ""}
                         onChange={(e) => {
                           setValues((v) => ({ ...v, [key]: e.target.value }));
-                          if (errors[key]) setErrors((er) => { const n = { ...er }; delete n[key]; return n; });
+                          // If the user edits after an error was shown, clear it.
+                          if (errors[key])
+                            setErrors((er) => {
+                              const n = { ...er };
+                              delete n[key];
+                              return n;
+                            });
+                        }}
+                        onBlur={() => {
+                          // Show validation as soon as the user leaves the input.
+                          if (!role) return;
+
+                          const val = (values[key] || "").trim();
+                          let err = "";
+
+                          if (!val) {
+                            err = `${label} is required`;
+                          } else if (role.fieldTypes?.[i] === "email" && !/\S+@\S+\.\S+/.test(val)) {
+                            err = "Enter a valid email";
+                          }
+
+                          if (err) setErrors((prev) => ({ ...prev, [key]: err }));
                         }}
                       />
                     </div>
