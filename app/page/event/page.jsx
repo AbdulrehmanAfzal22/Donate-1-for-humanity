@@ -7,9 +7,7 @@ import { MapPin, Calendar, Clock, Users, ChevronRight, ArrowLeft, X, ChevronLeft
 const UPCOMING_EVENT = {
     title: "Annual Ration Drive 2025",
     subtitle: "Nourishing Families Across Pakistan",
-    // IMPORTANT: include timezone offset so countdown works consistently across devices
-    // Pakistan time = UTC+05:00
-    date: "2025-08-15T10:00:00+05:00",
+    // Next Sunday at 6:00 PM Pakistan time (computed dynamically)
     venue: "Alhamra Cultural Complex",
     location: "The Mall Road, Lahore, Punjab",
     description:
@@ -17,6 +15,34 @@ const UPCOMING_EVENT = {
     capacity: "500+ Families",
     registrationLink: "#donate",
 };
+
+function getNextSundayAt6pmPKT() {
+    // Compute next Sunday 6:00 PM in Pakistan time (UTC+05:00)
+    // We build it as an ISO string with +05:00 so countdown is consistent across devices.
+    const now = new Date();
+
+    // Convert "now" to Pakistan local date parts
+    const pktNow = new Date(now.toLocaleString("en-US", { timeZone: "Asia/Karachi" }));
+
+    const day = pktNow.getDay(); // 0=Sun
+    let daysUntilSunday = (7 - day) % 7;
+
+    // If it's already Sunday and past (or equal) 6pm, go to next week
+    const isSunday = day === 0;
+    const isPast6pm = pktNow.getHours() > 18 || (pktNow.getHours() === 18 && pktNow.getMinutes() > 0);
+    if (isSunday && isPast6pm) daysUntilSunday = 7;
+
+    const target = new Date(pktNow);
+    target.setDate(pktNow.getDate() + daysUntilSunday);
+    target.setHours(18, 0, 0, 0);
+
+    const yyyy = target.getFullYear();
+    const mm = String(target.getMonth() + 1).padStart(2, "0");
+    const dd = String(target.getDate()).padStart(2, "0");
+
+    // 18:00:00 in PKT
+    return `${yyyy}-${mm}-${dd}T18:00:00+05:00`;
+}
 
 /* ── Past Events — add real photo arrays per event ── */
 const PAST_EVENTS = [
@@ -284,9 +310,11 @@ function EventDetailPage({ event, onBack }) {
 export default function EventsPage() {
     const [selectedEvent, setSelectedEvent] = useState(null);
     const [popupEvent, setPopupEvent] = useState(null);
-    const countdown = useCountdown(UPCOMING_EVENT.date);
 
-    const eventDate = new Date(UPCOMING_EVENT.date);
+    const upcomingTarget = getNextSundayAt6pmPKT();
+    const countdown = useCountdown(upcomingTarget);
+
+    const eventDate = new Date(upcomingTarget);
     const formattedDate = eventDate.toLocaleDateString("en-PK", {
         weekday: "long",
         day: "numeric",

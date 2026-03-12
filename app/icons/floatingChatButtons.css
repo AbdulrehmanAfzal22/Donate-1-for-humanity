@@ -1,0 +1,75 @@
+.fcb {
+  position: fixed;
+  right: 18px;
+  bottom: 18px;
+  z-index: 2600;
+
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.fcb__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+
+  width: 52px;
+  height: 52px;
+  padding: 0;
+  border-radius: 999px;
+  text-decoration: none;
+  color: #fff;
+
+  box-shadow: 0 14px 32px rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+
+  transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+}
+
+.fcb__btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 18px 42px rgba(0, 0, 0, 0.32);
+}
+
+.fcb__btn:active {
+  transform: translateY(0);
+}
+
+.fcb__btn svg {
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+}
+
+.fcb__label {
+  display: none;
+}
+
+.fcb__btn--whatsapp {
+  background: linear-gradient(135deg, #25D366, #128C7E);
+}
+
+.fcb__btn--messenger {
+  background: linear-gradient(135deg, #00B2FF, #006AFF);
+}
+
+@media (max-width: 520px) {
+  .fcb {
+    right: 12px;
+    bottom: 12px;
+  }
+
+  .fcb__btn {
+    width: 48px;
+    height: 48px;
+  }
+
+  .fcb__btn svg {
+    width: 22px;
+    height: 22px;
+  }
+}

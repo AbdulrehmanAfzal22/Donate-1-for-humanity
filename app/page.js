@@ -10,6 +10,8 @@ import DonateSection from './page/banks/page';
 import Footer from './page/footer/page';
 import Report from './page/package/page';
 import EventsPage from './page/event/page';
+import FloatingChatButtons from "./icons/FloatingChatButtons";
+
 export default function Page() {
   const [showBankModal, setShowBankModal] = useState(false);
 
@@ -48,6 +50,10 @@ export default function Page() {
       <Donate />
       
       <Footer />
+      <FloatingChatButtons
+        whatsappLink="https://wa.me/923270195296"
+        messengerLink="https://m.me/d1h.trust"
+      />
 
       {showBankModal && (
         <div
