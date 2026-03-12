@@ -1,7 +1,6 @@
 "use client";
 import { useState } from "react";
 import Image from "next/image";
-import useBlurValidation from "../../hooks/useBlurValidation";
 import { HandCoins, HeartHandshake, Home } from "lucide-react";
 import "./join.css";
 import d1h from "../../../public/assets/d1h.png";
@@ -51,66 +50,44 @@ export default function JoinModal({ onClose }) {
   const [step, setStep] = useState("choose");
   const [selected, setSelected] = useState(null);
   const [values, setValues] = useState({});
+  const [errors, setErrors] = useState({});
+  const [loading, setLoading] = useState(false);
 
   const role = ROLES.find((r) => r.id === selected);
-
-  const validators = role
-    ? role.fields.reduce((acc, label, i) => {
-        const key = `field_${i}`;
-        const type = role.fieldTypes[i];
-
-        acc[key] = (v) => {
-          const value = (v ?? "").trim();
-
-          if (!value) return `${label} is required`;
-
-          if (type === "email") {
-            if (!/\S+@\S+\.\S+/.test(value)) return "Enter a valid email address";
-          }
-
-          if (type === "tel") {
-            const normalized = value.replace(/\s+/g, "");
-            if (!/^(\+92|0)[3-9]\d{9}$/.test(normalized)) {
-              return "Enter a valid Pakistani phone number (+92 or 03XX format)";
-            }
-          }
-
-          if (label.toLowerCase().includes("donation") && role.id === "donor") {
-            const amount = parseFloat(value.replace(/[^\d.]/g, ""));
-            if (isNaN(amount) || amount < 100) return "Minimum donation amount is PKR 100";
-          }
-
-          return "";
-        };
-
-        return acc;
-      }, {})
-    : {};
-
-  const {
-    visibleErrors,
-    setValue,
-    handleBlur,
-    validateAll,
-  } = useBlurValidation({
-    initialValues: values,
-    validators,
-  });
-  const [loading, setLoading] = useState(false);
 
   const handleSelect = (id) => {
     setSelected(id);
     setStep("form");
     setValues({});
+    setErrors({});
   };
 
+  const validate = () => {
+    const newErrors = {};
 
+    // Guard: validate can be triggered before a role is selected.
+    if (!role) return newErrors;
+
+    role.fields.forEach((label, i) => {
+      const key = `field_${i}`;
+      const val = values[key];
+
+      if (!val || !val.trim()) {
+        newErrors[key] = `${label} is required`;
+      }
+
+      if (role.fieldTypes?.[i] === "email" && val && !/\S+@\S+\.\S+/.test(val)) {
+        newErrors[key] = "Enter a valid email";
+      }
+    });
+
+    return newErrors;
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!role) return;
-    const errs = validateAll();
-    if (Object.keys(errs).length) return;
+    const errs = validate();
+    if (Object.keys(errs).length) { setErrors(errs); return; }
 
     setLoading(true);
     try {
@@ -192,21 +169,19 @@ export default function JoinModal({ onClose }) {
                 return (
                   <div key={key} className="jm__field">
                     <label className="jm__label">{label}</label>
-                    <div className={`jm__input-wrap ${visibleErrors[key] ? "jm__input-wrap--error" : ""}`}>
+                    <div className={`jm__input-wrap ${errors[key] ? "jm__input-wrap--error" : ""}`}>
                       <input
                         className="jm__input"
                         type={role.fieldTypes[i]}
                         placeholder={role.placeholders[i]}
                         value={values[key] || ""}
                         onChange={(e) => {
-                          const next = e.target.value;
-                          setValues((v) => ({ ...v, [key]: next }));
-                          setValue(key, next);
+                          setValues((v) => ({ ...v, [key]: e.target.value }));
+                          if (errors[key]) setErrors((er) => { const n = { ...er }; delete n[key]; return n; });
                         }}
-                        onBlur={handleBlur}
                       />
                     </div>
-                    {visibleErrors[key] && <span className="jm__error">{visibleErrors[key]}</span>}
+                    {errors[key] && <span className="jm__error">{errors[key]}</span>}
                   </div>
                 );
               })}
@@ -225,15 +200,46 @@ export default function JoinModal({ onClose }) {
         {/* ── STEP 3: Success ── */}
         {step === "success" && role && (
           <div className="jm__success">
-            <div className="jm__success-ring">
-              <div className="jm__success-icon">✓</div>
+
+            {/* Confetti dots */}
+            {["c1","c2","c3","c4","c5","c6","c7","c8"].map(c => (
+              <span key={c} className={`jm__confetti jm__confetti--${c}`} />
+            ))}
+
+            {/* Big emoji icon with rings */}
+            <div className="jm__success-rings">
+              <div className="jm__success-ring jm__success-ring--3" />
+              <div className="jm__success-ring jm__success-ring--2" />
+              <div className="jm__success-ring jm__success-ring--1" />
+              <div className="jm__success-orb">
+                <span className="jm__success-emoji">🎉</span>
+              </div>
             </div>
-            <h2 className="jm__success-title">You're In!</h2>
-            <p className="jm__success-msg">
-              Thank you for signing up as a <strong>{role.title}</strong>.<br />
-              We'll be in touch with you shortly.
-            </p>
-            <button className="jm__success-btn" onClick={onClose}>Close</button>
+
+            {/* Text */}
+            <div className="jm__success-text-wrap">
+              <h2 className="jm__success-title">You're In! <span>✨</span></h2>
+              <p className="jm__success-role-line">
+                Joined as <span className="jm__success-role-chip">{role.icon && <role.icon size={13} strokeWidth={2.5} />} {role.title}</span>
+              </p>
+              <p className="jm__success-msg">
+                Thank you for stepping up 💛 We'll review your details and reach out to you shortly with next steps.
+              </p>
+            </div>
+
+            {/* Stats row */}
+            <div className="jm__success-stats">
+              <div className="jm__success-stat"><span className="jm__success-stat-num">500+</span><span className="jm__success-stat-lbl">Volunteers</span></div>
+              <div className="jm__success-stat-div" />
+              <div className="jm__success-stat"><span className="jm__success-stat-num">20+</span><span className="jm__success-stat-lbl">Events</span></div>
+              <div className="jm__success-stat-div" />
+              <div className="jm__success-stat"><span className="jm__success-stat-num">5k+</span><span className="jm__success-stat-lbl">Families</span></div>
+            </div>
+
+            <button className="jm__success-btn" onClick={onClose}>
+              Back to Home 🏠
+            </button>
+
           </div>
         )}
 

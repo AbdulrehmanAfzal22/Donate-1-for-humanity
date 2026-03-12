@@ -139,7 +139,7 @@
 .imageContainer1:hover .reportImage1::after,
 .imageContainer2:hover .reportImage2::after,
 .imageContainer3:hover .reportImage3::after {
-  background: rgba(124, 58, 255, 0.72);
+  background: rgba(94, 94, 94, 0.72);
 }
 
 .reportImage1 span,
@@ -169,17 +169,15 @@
   right: 155px;
 }
 
-.reportImage1 p,
-.reportImage2 p,
-.reportImage3 p {
-  color: #fff;
-  z-index: 2;
-  font-family: Poppins, sans-serif;
-  font-size: 15px;
-  position: absolute;
-  top: 140px;
-  left: 30px;
-  right: 100px;
+.reportImage1 p, .reportImage2 p, .reportImage3 p {
+    color: #fff;
+    z-index: 2;
+    font-family: Poppins, sans-serif;
+    font-size: 15px;
+    position: absolute;
+    top: 158px;
+    left: 30px;
+    right: 100px;
 }
 
 .reportImage1 svg,
@@ -212,7 +210,6 @@
   min-width: 48px;
   min-height: 48px;
   font-size: 22px !important;
-  /* Indigo icon on white circle */
   color: #7C3AFF !important;
   background-color: white !important;
   padding: 12px;
