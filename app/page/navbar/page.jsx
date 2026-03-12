@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import "./nav.css";
 import Image from "next/image";
 import sayalogo from "../../../public/assets/d1h.png";
@@ -11,6 +11,62 @@ const Navbar = () => {
   const [showJoin, setShowJoin] = useState(false);
 
   const links = ["Home", "About us", "Facilities", "Donate", "Programs", "Events"];
+
+  const idMap = useMemo(() => ({
+    "Home": "hero",
+    "About us": "about",
+    "Programs": "packages",
+    "Facilities": "facilities",
+    "Zakat": "zakat",
+    "Donate": "donate",
+    "Events": "events",
+    "Contacts": "contact",
+  }), []);
+
+  // Scroll-spy: update active nav item while scrolling
+  useEffect(() => {
+    if (menuOpen) return;
+
+    const observedIds = links.map((l) => idMap[l]).filter(Boolean);
+    const sections = observedIds
+      .map((id) => document.getElementById(id))
+      .filter(Boolean);
+
+    if (!sections.length) return;
+
+    const idToLink = Object.fromEntries(
+      Object.entries(idMap).map(([label, id]) => [id, label])
+    );
+
+    const obs = new IntersectionObserver(
+      (entries) => {
+        // Pick the most visible intersecting section
+        const visible = entries
+          .filter((e) => e.isIntersecting)
+          .sort((a, b) => (b.intersectionRatio || 0) - (a.intersectionRatio || 0));
+
+        if (!visible.length) return;
+        const top = visible[0];
+        const next = idToLink[top.target.id];
+        if (next) setActive(next);
+      },
+      {
+        // account for fixed navbar height so section becomes active a bit earlier
+        root: null,
+        rootMargin: "-90px 0px -55% 0px",
+        threshold: [0.15, 0.25, 0.35, 0.5, 0.65],
+      }
+    );
+
+    sections.forEach((s) => obs.observe(s));
+    return () => obs.disconnect();
+  }, [idMap, links]);
+
+  // When mobile menu is open, keep current active item (don't update while user is navigating the menu)
+  useEffect(() => {
+    if (!menuOpen) return;
+    // no-op for now (we simply rely on the observer effect below checking menuOpen)
+  }, [menuOpen]);
 
   return (
     <>
@@ -38,13 +94,13 @@ const Navbar = () => {
                 className={`navbar__link ${active === link ? "navbar__link--active" : ""}`}
                 onClick={(e) => {
                   e.preventDefault();
-                  const idMap = {
-                    "Home": "hero", "About us": "about", "Programs": "packages",
-                    "Facilities": "facilities", "Zakat": "zakat",
-                    "Donate": "donate", "Events": "events", "Contacts": "contact",
-                  };
                   const section = document.getElementById(idMap[link]);
-                  if (section) section.scrollIntoView({ behavior: "smooth", block: "start" });
+                  if (!section) return;
+
+                  // Fixed navbar offset
+                  const navOffset = 84;
+                  const y = section.getBoundingClientRect().top + window.scrollY - navOffset;
+                  window.scrollTo({ top: y, behavior: "smooth" });
                   setActive(link);
                   setMenuOpen(false);
                 }}

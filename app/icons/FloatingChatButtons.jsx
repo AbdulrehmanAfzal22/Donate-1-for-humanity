@@ -6,6 +6,7 @@ export default function FloatingChatButtons({
   whatsappLink = "https://wa.me/923270195296",
   messengerLink = "https://m.me/d1h.trust",
 }) {
+  
   return (
     <div className="fcb" aria-label="Chat buttons">
 

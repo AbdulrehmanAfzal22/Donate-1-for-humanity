@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import "./event.css";
 import { MapPin, Calendar, Clock, Users, ChevronRight, ArrowLeft, X, ChevronLeft } from "lucide-react";
+import CountUpOnView from "../../components/CountUpOnView";
 
 /* ── Upcoming Event ── */
 const UPCOMING_EVENT = {
@@ -310,6 +311,11 @@ function EventDetailPage({ event, onBack }) {
 export default function EventsPage() {
     const [selectedEvent, setSelectedEvent] = useState(null);
     const [popupEvent, setPopupEvent] = useState(null);
+    const [mounted, setMounted] = useState(false);
+
+    useEffect(() => {
+        setMounted(true);
+    }, []);
 
     const upcomingTarget = getNextSundayAt6pmPKT();
     const countdown = useCountdown(upcomingTarget);
@@ -352,6 +358,39 @@ export default function EventsPage() {
                     <p className="ev__page-sub">Be part of something meaningful. Every event is a step towards a better tomorrow.</p>
                 </div>
 
+                {/* Stats row */}
+                <section className="ev-stats" aria-label="Impact statistics">
+                    <div className="ev-stats__grid">
+                        <div className="ev-stats__card">
+                            <p className="ev-stats__num">
+                                <CountUpOnView value={35} suffix="+" />
+                            </p>
+                            <p className="ev-stats__label">Events Organized</p>
+                        </div>
+
+                        <div className="ev-stats__card">
+                            <p className="ev-stats__num">
+                                <CountUpOnView value={250} suffix="+" />
+                            </p>
+                            <p className="ev-stats__label">Volunteers</p>
+                        </div>
+
+                        <div className="ev-stats__card">
+                            <p className="ev-stats__num">
+                                <CountUpOnView value={5000} suffix="+" />
+                            </p>
+                            <p className="ev-stats__label">People Helped</p>
+                        </div>
+
+                        <div className="ev-stats__card">
+                            <p className="ev-stats__num">
+                                <CountUpOnView value={1200} suffix="+" />
+                            </p>
+                            <p className="ev-stats__label">Meals Served</p>
+                        </div>
+                    </div>
+                </section>
+
                 {/* Upcoming */}
                 <section className="ev__upcoming">
                     <div className="ev__upcoming-badge">
@@ -389,7 +428,9 @@ export default function EventsPage() {
                                 ].map(({ val, label }) => (
                                     <div key={label} className="ev__cd-unit">
                                         <div className="ev__cd-box">
-                                            <span className="ev__cd-num">{String(val).padStart(2, "0")}</span>
+                                            <span className="ev__cd-num" suppressHydrationWarning>
+                                                {mounted ? String(val).padStart(2, "0") : "00"}
+                                            </span>
                                         </div>
                                         <span className="ev__cd-label">{label}</span>
                                     </div>

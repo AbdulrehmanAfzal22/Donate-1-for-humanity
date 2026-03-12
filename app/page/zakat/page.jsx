@@ -9,7 +9,7 @@ const impacts = [
   { icon: Heart,       label: "Lasting Change",     color: "#1f325a" },
 ];
 
-const Zakat = () => {
+const Zakat = ({ onDonateZakatClick }) => {
   return (
     <section className="zakat" id="zakat">
 
@@ -74,7 +74,20 @@ const Zakat = () => {
           })}
         </div>
 
-        <button className="zakat__btn">
+        <button
+          className="zakat__btn"
+          onClick={() => {
+            // Open donor form modal (same as Hero donate)
+            if (typeof onDonateZakatClick === "function") onDonateZakatClick();
+            // Also scroll to donate section for context
+            const section = document.getElementById("donate");
+            if (section) {
+              const navOffset = 84;
+              const y = section.getBoundingClientRect().top + window.scrollY - navOffset;
+              window.scrollTo({ top: y, behavior: "smooth" });
+            }
+          }}
+        >
           <Heart size={18} color="#fff" strokeWidth={2.5} />
           Donate Your Zakat
         </button>

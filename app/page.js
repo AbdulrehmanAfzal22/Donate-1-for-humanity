@@ -44,7 +44,7 @@ export default function Page() {
       <Hero onDonateClick={openModal} />
       <About />
       <Facilities />
-      <Zakat />
+      <Zakat onDonateZakatClick={openModal} />
       <Report />
       <EventsPage />
       <Donate />
