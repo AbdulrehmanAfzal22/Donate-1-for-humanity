@@ -56,8 +56,11 @@ const Zakat = ({ onDonateZakatClick }) => {
         </div>
 
         <p className="zakat__description">
-          Your Zakat can transform lives — supporting orphans' education, providing healthcare,
-          and uplifting families in need. A fraction of your obligation creates lasting change.
+    <b className="bold">   The Prophet ﷺ said:</b>
+
+“Save yourself from Hellfire even by giving half of a date in charity.”
+
+ <b className="bold">    Sahih al-Bukhari 1417, Sahih Muslim 1016</b>
         </p>
 
         <div className="zakat__impacts">

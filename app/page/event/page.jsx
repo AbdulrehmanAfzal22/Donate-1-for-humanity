@@ -1,8 +1,61 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import "./event.css";
 import { MapPin, Calendar, Clock, Users, ChevronRight, ArrowLeft, X, ChevronLeft } from "lucide-react";
-import CountUpOnView from "../../components/CountUpOnView";
+
+/* ── CountUp Component that animates every time on view ── */
+function CountUpOnView({ value, suffix = "", startDigit = 0 }) {
+    const [count, setCount] = useState(startDigit);
+    const [isInView, setIsInView] = useState(false);
+    const ref = useRef(null);
+
+    useEffect(() => {
+        const observer = new IntersectionObserver(
+            (entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        setIsInView(true);
+                    } else {
+                        setIsInView(false);
+                        setCount(startDigit);
+                    }
+                });
+            },
+            { threshold: 0.3 }
+        );
+
+        if (ref.current) {
+            observer.observe(ref.current);
+        }
+
+        return () => observer.disconnect();
+    }, [startDigit]);
+
+    useEffect(() => {
+        if (!isInView) return;
+
+        const duration = 2000;
+        const steps = 60;
+        const increment = (value - startDigit) / steps;
+        let current = startDigit;
+        let step = 0;
+
+        const timer = setInterval(() => {
+            step++;
+            if (step >= steps) {
+                setCount(value);
+                clearInterval(timer);
+            } else {
+                current += increment;
+                setCount(Math.floor(current));
+            }
+        }, duration / steps);
+
+        return () => clearInterval(timer);
+    }, [isInView, value, startDigit]);
+
+    return <span ref={ref}>{count}{suffix}</span>;
+}
 
 /* ── Upcoming Event ── */
 const UPCOMING_EVENT = {
@@ -363,28 +416,28 @@ export default function EventsPage() {
                     <div className="ev-stats__grid">
                         <div className="ev-stats__card">
                             <p className="ev-stats__num">
-                                <CountUpOnView value={35} suffix="+" />
+                                <CountUpOnView value={35} suffix="+" startDigit={8} />
                             </p>
                             <p className="ev-stats__label">Events Organized</p>
                         </div>
 
                         <div className="ev-stats__card">
                             <p className="ev-stats__num">
-                                <CountUpOnView value={250} suffix="+" />
+                                <CountUpOnView value={250} suffix="+" startDigit={42} />
                             </p>
                             <p className="ev-stats__label">Volunteers</p>
                         </div>
 
                         <div className="ev-stats__card">
                             <p className="ev-stats__num">
-                                <CountUpOnView value={5000} suffix="+" />
+                                <CountUpOnView value={5000} suffix="+" startDigit={1250} />
                             </p>
                             <p className="ev-stats__label">People Helped</p>
                         </div>
 
                         <div className="ev-stats__card">
                             <p className="ev-stats__num">
-                                <CountUpOnView value={1200} suffix="+" />
+                                <CountUpOnView value={1200} suffix="+" startDigit={350} />
                             </p>
                             <p className="ev-stats__label">Meals Served</p>
                         </div>
@@ -473,7 +526,7 @@ export default function EventsPage() {
                                     <span className="ev__hist-meta-item"><Calendar size={12} /> {ev.date}</span>
                                 </div>
                                 <div className="ev__hist-footer">
-                                    <span className="ev__hist-view-btn">View Photos <ChevronRight size={13} /></span>
+                                    <span className="ev__hist-view-btn">View Photos <ChevronRight size={13} /><span className="circular-glow"></span></span>
                                 </div>
                                 <div className="ev__hist-line" />
                             </button>

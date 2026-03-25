@@ -19,16 +19,16 @@ import img9  from "../../../public/assets/skillsaya.jpg";
 import img10 from "../../../public/assets/widowsaya.avif";
 
 const facilities = [
-  { icon: ShoppingBasket, title: "Ration Drives",      description: "Supporting white-collar families who were suffering from lockdown with essential food supplies and household necessities.", color: "#f07b2f", image: s15,  size: "big"   },
-  { icon: GraduationCap,  title: "Education Support",  description: "Bearing educational expenses for white-collar families' children and orphans to ensure they continue their studies.",        color: "#4caf82", image: s18,  size: "small" },
-  { icon: Home,           title: "Monthly Support",    description: "Providing regular ration and helping with household expenses of widows and white-collar families in need.",                   color: "#1f325a", image: s19,  size: "big"   },
-  { icon: HeartPulse,     title: "Healthcare",         description: "Providing healthcare facilities and arranging medical camps for underprivileged communities across Pakistan.",                color: "#e91e8c", image: se,   size: "small" },
-  { icon: Droplets,       title: "Clean Water",        description: "Installing water filtration plants in rural communities to provide access to clean and safe drinking water.",                 color: "#0ea5e9", image: sg,   size: "big"   },
-  { icon: Utensils,       title: "Iftar Programs",     description: "Organizing community Iftar gatherings during Ramadan for underprivileged families and individuals.",                          color: "#f5a623", image: img7, size: "small" },
-  { icon: Baby,           title: "Orphan Care",        description: "Providing comprehensive care, education and emotional support to orphaned children across Pakistan.",                         color: "#a855f7", image: sd,   size: "big"   },
-  { icon: Shirt,          title: "Clothing Drives",    description: "Distributing seasonal clothing to families in need, ensuring warmth and dignity throughout the year.",                        color: "#4caf82", image: img8, size: "small" },
-  { icon: BookOpen,       title: "Skill Training",     description: "Empowering youth and women with vocational skills to help them become self-sufficient and independent.",                      color: "#f07b2f", image: img9, size: "big"   },
-  { icon: HandHeart,      title: "Widow Support",      description: "Providing financial and emotional support to widows to help them rebuild their lives and care for their families.",           color: "#e91e8c", image: img10,size: "small" },
+  { icon: GraduationCap,  title: "Education Support",    color: "#4caf82", image: s18,  size: "small" },
+  { icon: Home,           title: "Monthly Support",       color: "#1f325a", image: s19,  size: "big"   },
+  { icon: HeartPulse,     title: "Healthcare",            color: "#e91e8c", image: se,   size: "small" },
+  { icon: Droplets,       title: "Clean Water",           color: "#0ea5e9", image: sg,   size: "big"   },
+  { icon: Utensils,       title: "Iftar Programs",        color: "#f5a623", image: img7, size: "small" },
+  { icon: Baby,           title: "Orphan Care",           color: "#a855f7", image: sd,   size: "big"   },
+  { icon: Shirt,          title: "Clothing Drives",       color: "#4caf82", image: img8, size: "small" },
+  { icon: BookOpen,       title: "Skill Training",        color: "#f07b2f", image: img9, size: "big"   },
+  { icon: ShoppingBasket, title: "Ration Drives",       color: "#f07b2f", image: s15,  size: "big"   },
+  { icon: HandHeart,      title: "Widow Support",         color: "#e91e8c", image: img10,size: "small" },
 ];
 
 const Facilities = () => {
